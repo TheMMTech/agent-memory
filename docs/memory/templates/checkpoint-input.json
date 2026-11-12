@@ -1,0 +1,19 @@
+{
+  "task": "ISSUE-123",
+  "title": "Describe a completed development milestone",
+  "summary": "Replace this example with verified progress and rationale.",
+  "agent": "github-copilot",
+  "surface": "vscode",
+  "status": "in-progress",
+  "review_status": "draft",
+  "components": [],
+  "related_paths": [],
+  "related_commits": [],
+  "source_refs": [],
+  "decisions": [],
+  "lessons": [],
+  "tests": [],
+  "blockers": [],
+  "next_actions": ["Identify the next concrete action."],
+  "supersedes": []
+}

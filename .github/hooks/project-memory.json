@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "bash": "python3 tools/memory/memory.py hook sessionStart",
+        "powershell": "python tools/memory/memory.py hook sessionStart",
+        "cwd": ".",
+        "timeoutSec": 10
+      }
+    ],
+    "agentStop": [
+      {
+        "type": "command",
+        "bash": "python3 tools/memory/memory.py hook agentStop",
+        "powershell": "python tools/memory/memory.py hook agentStop",
+        "cwd": ".",
+        "timeoutSec": 10
+      }
+    ],
+    "sessionEnd": [
+      {
+        "type": "command",
+        "bash": "python3 tools/memory/memory.py hook sessionEnd",
+        "powershell": "python tools/memory/memory.py hook sessionEnd",
+        "cwd": ".",
+        "timeoutSec": 10
+      }
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PROJECT_DIR}/tools/memory/memory.py\" hook --agent claude-code SessionStart || python \"${CLAUDE_PROJECT_DIR}/tools/memory/memory.py\" hook --agent claude-code SessionStart",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PROJECT_DIR}/tools/memory/memory.py\" hook --agent claude-code Stop || python \"${CLAUDE_PROJECT_DIR}/tools/memory/memory.py\" hook --agent claude-code Stop",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PROJECT_DIR}/tools/memory/memory.py\" hook --agent claude-code SessionEnd || python \"${CLAUDE_PROJECT_DIR}/tools/memory/memory.py\" hook --agent claude-code SessionEnd",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

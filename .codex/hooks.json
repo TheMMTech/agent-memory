@@ -1,0 +1,40 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$(git rev-parse --show-toplevel)/tools/memory/memory.py\" hook --agent codex SessionStart || python \"$(git rev-parse --show-toplevel)/tools/memory/memory.py\" hook --agent codex SessionStart",
+            "commandWindows": "python tools/memory/memory.py hook --agent codex SessionStart",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$(git rev-parse --show-toplevel)/tools/memory/memory.py\" hook --agent codex Stop || python \"$(git rev-parse --show-toplevel)/tools/memory/memory.py\" hook --agent codex Stop",
+            "commandWindows": "python tools/memory/memory.py hook --agent codex Stop",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$(git rev-parse --show-toplevel)/tools/memory/memory.py\" hook --agent codex SessionEnd || python \"$(git rev-parse --show-toplevel)/tools/memory/memory.py\" hook --agent codex SessionEnd",
+            "commandWindows": "python tools/memory/memory.py hook --agent codex SessionEnd",
+            "timeout": 3
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "allowed_git_host": "github.com",
+  "git_ssh_user": "git",
+  "max_record_bytes": 32768,
+  "max_recall_chars": 16000,
+  "max_start_chars": 6000,
+  "max_results": 5,
+  "stale_after_days": 90,
+  "session_capture": false,
+  "session_push": false,
+  "session_repository": "themmtech/agent-memory",
+  "session_retention_days": 30,
+  "session_max_transcript_bytes": 50331648,
+  "session_redact_emails": true
+}

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Project memory checkpoint version 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "id", "created_at", "base_commit", "task", "title",
+    "summary", "agent", "surface", "status", "review_status", "components",
+    "related_paths", "related_commits", "source_refs", "decisions", "lessons",
+    "tests", "blockers", "next_actions", "supersedes"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "id": {"type": "string", "pattern": "^mem-[0-9]{8}T[0-9]{6}Z-[0-9a-f]{32}$"},
+    "created_at": {"type": "string", "format": "date-time", "pattern": "(?:Z|\\+00:00)$"},
+    "base_commit": {"$ref": "#/$defs/commit"},
+    "task": {"$ref": "#/$defs/shortText"},
+    "title": {"$ref": "#/$defs/shortText"},
+    "summary": {"type": "string", "minLength": 1, "maxLength": 8000},
+    "agent": {"$ref": "#/$defs/shortText"},
+    "surface": {"$ref": "#/$defs/shortText"},
+    "status": {"enum": ["in-progress", "blocked", "completed", "retired"]},
+    "review_status": {"enum": ["draft", "accepted"]},
+    "components": {"$ref": "#/$defs/stringList"},
+    "related_paths": {"$ref": "#/$defs/stringList"},
+    "related_commits": {"type": "array", "maxItems": 50, "uniqueItems": true, "items": {"$ref": "#/$defs/commit"}},
+    "source_refs": {"$ref": "#/$defs/stringList"},
+    "decisions": {"$ref": "#/$defs/stringList"},
+    "lessons": {"$ref": "#/$defs/stringList"},
+    "blockers": {"$ref": "#/$defs/stringList"},
+    "next_actions": {"$ref": "#/$defs/stringList"},
+    "supersedes": {"type": "array", "maxItems": 50, "uniqueItems": true, "items": {"type": "string", "pattern": "^mem-[0-9]{8}T[0-9]{6}Z-[0-9a-f]{32}$"}},
+    "tests": {
+      "type": "array", "maxItems": 50,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["command", "outcome", "evidence"],
+        "properties": {
+          "command": {"type": "string", "minLength": 1, "maxLength": 1000},
+          "outcome": {"enum": ["passed", "failed", "not-run"]},
+          "evidence": {"type": "string", "minLength": 1, "maxLength": 2000}
+        }
+      }
+    }
+  },
+  "allOf": [
+    {"if": {"properties": {"status": {"enum": ["in-progress", "blocked"]}}},
+     "then": {"properties": {"next_actions": {"minItems": 1}}}}
+  ],
+  "$defs": {
+    "shortText": {"type": "string", "minLength": 1, "maxLength": 200},
+    "commit": {"type": "string", "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$"},
+    "stringList": {"type": "array", "maxItems": 50, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 2000}}
+  }
+}

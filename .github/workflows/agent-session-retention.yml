@@ -1,0 +1,76 @@
+name: Agent session retention
+
+# Deletes captured agent session refs older than the retention period:
+# the AGENT_MEMORY_RETENTION_DAYS repository or organization variable, then
+# session_retention_days in docs/memory/config.json, then 30 days. Refs dated
+# in the future or named outside the session pattern are deleted too.
+#
+# The write token is never exported to the helper's environment; only Git
+# commands receive it. The helper runs from the default-branch commit (scheduled
+# runs always use it; manual runs are refused on other branches) and only
+# decides which refs have expired.
+
+on:
+  schedule:
+    - cron: '23 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: agent-session-retention
+  cancel-in-progress: false
+
+jobs:
+  prune:
+    # Works on GitHub.com and GitHub Enterprise hosts. Change runs-on if your
+    # host requires its own runners; the job needs Linux, Git, Bash and Python 3.10+.
+    if: >-
+      (github.event_name == 'schedule' ||
+       github.ref == format('refs/heads/{0}', github.event.repository.default_branch))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Delete expired session refs in this repository
+        shell: bash
+        env:
+          GIT_TOKEN: ${{ github.token }}
+          SERVER_URL: ${{ github.server_url }}
+          SOURCE_REPOSITORY: ${{ github.repository }}
+          SOURCE_REF: ${{ github.ref }}
+          SOURCE_SHA: ${{ github.sha }}
+          AGENT_MEMORY_RETENTION_DAYS: ${{ vars.AGENT_MEMORY_RETENTION_DAYS }}
+        run: |
+          set -euo pipefail
+          [[ "$SERVER_URL" =~ ^https://[A-Za-z0-9.-]+$ ]]
+          [[ "$SOURCE_REPOSITORY" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]]
+          [[ "$SOURCE_REF" =~ ^refs/heads/[A-Za-z0-9_./-]+$ ]]
+          [[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          AUTH_HEADER="$(printf 'x-access-token:%s' "$GIT_TOKEN" | base64 | tr -d '\n')"
+          unset GIT_TOKEN
+          export GIT_TERMINAL_PROMPT=0
+          authgit() {
+            GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=http.extraHeader \
+              GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $AUTH_HEADER" git "$@"
+          }
+          WORK_DIR="$(mktemp -d)"
+          trap 'rm -rf "$WORK_DIR"' EXIT
+          git -C "$WORK_DIR" init --quiet
+          git -C "$WORK_DIR" remote add origin "$SERVER_URL/$SOURCE_REPOSITORY.git"
+          authgit -C "$WORK_DIR" fetch --quiet --no-tags --depth=1 origin "$SOURCE_REF"
+          test "$(git -C "$WORK_DIR" rev-parse FETCH_HEAD)" = "$SOURCE_SHA"
+          git -C "$WORK_DIR" -c core.hooksPath=/dev/null checkout --quiet --detach FETCH_HEAD
+          authgit -C "$WORK_DIR" ls-remote origin 'refs/agent-memory/sessions/*' > "$WORK_DIR/.git/session-refs.txt"
+          (cd "$WORK_DIR" && python3 tools/memory/memory.py sessions expired \
+            --ls-remote-file .git/session-refs.txt) > "$WORK_DIR/.git/expired.txt"
+          grep -E '^refs/agent-memory/sessions/[^[:space:]]+$' "$WORK_DIR/.git/expired.txt" \
+            > "$WORK_DIR/.git/delete.txt" || true
+          echo "Expired session refs: $(wc -l < "$WORK_DIR/.git/delete.txt")"
+          mapfile -t EXPIRED < "$WORK_DIR/.git/delete.txt"
+          FAILED=0
+          for ((i = 0; i < ${#EXPIRED[@]}; i += 50)); do
+            # Keep going after a failed batch; report the failure at the end.
+            authgit -C "$WORK_DIR" push --quiet origin --delete "${EXPIRED[@]:i:50}" || FAILED=1
+          done
+          exit "$FAILED"
