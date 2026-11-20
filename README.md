@@ -33,7 +33,7 @@ the Python implementation to follow them.
 | See the next improvements | [Roadmap](ROADMAP.md) |
 | Help maintain the solution | [Contributing](CONTRIBUTING.md) |
 
-The helper reports version 0.2.0 (see the [Changelog](CHANGELOG.md)). Local
+The helper reports version 0.3.0 (see the [Changelog](CHANGELOG.md)). Local
 tests, fresh-clone recovery, and a Windows end-to-end capture through the real
 hook command were exercised. Live-client behavior and your host's rulesets and
 push protection for session refs should be validated in your own environment

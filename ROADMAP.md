@@ -2,7 +2,7 @@
 
 This is the improvement plan for the repository-memory kit. It is a planning
 document, not a promise of delivery dates or confirmation that a feature works.
-The current helper version is 0.2.0. Read [the changelog](CHANGELOG.md) for what
+The current helper version is 0.3.0. Read [the changelog](CHANGELOG.md) for what
 has actually been delivered and [the user guides](docs/memory/guides/README.md)
 for how to use the current version.
 
