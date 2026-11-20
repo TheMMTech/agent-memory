@@ -15,6 +15,8 @@ never in an issue or pull request. See the [roadmap](ROADMAP.md) for priorities 
   outside contributor's fork run only after a maintainer approves each run.
 - A maintainer reviews every change, and changes to hooks, `tools/`, workflows,
   or agent instructions get extra scrutiny because they run on users' machines.
+  The `main` ruleset requires one approving review from someone other than the
+  pull request's author, and nobody can merge past it, maintainers included.
 - Pull requests are squash-merged, so `main` has one signed commit per pull
   request. You do not need to sign your own commits; GitHub signs the squash
   commit. Keep the pull request title in conventional-commit form
