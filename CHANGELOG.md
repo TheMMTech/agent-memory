@@ -21,6 +21,8 @@ client or deployment check; verification limits are listed explicitly.
 
 ### Changed
 
+- The README credits the project's deep collaboration with Claude Code and
+  explains how to verify the work independently.
 - The session retention workflow now has read-only top-level permissions and
   grants `contents: write` to its one job only.
 - The README and getting-started guide warn that session refs in a public
