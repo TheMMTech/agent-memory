@@ -27,6 +27,8 @@ client or deployment check; verification limits are listed explicitly.
   both on; use it only in private repositories, because anyone who can read a
   repository can fetch its session refs. Existing configurations, and the
   runtime defaults for older configurations without these keys, are unchanged.
+- The README credits the project's deep collaboration with Claude Code and
+  explains how to verify the work independently.
 - The session retention workflow now has read-only top-level permissions and
   grants `contents: write` to its one job only.
 - The README and getting-started guide warn that session refs in a public

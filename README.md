@@ -4,11 +4,16 @@
 [![CodeQL](https://github.com/TheMMTech/agent-memory/actions/workflows/codeql.yml/badge.svg)](https://github.com/TheMMTech/agent-memory/actions/workflows/codeql.yml)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/TheMMTech/agent-memory/badge)](https://scorecard.dev/viewer/?uri=github.com/TheMMTech/agent-memory)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Built with Claude Code](https://img.shields.io/badge/Built_with-Claude_Code-D97757)](#built-with-claude-code)
 
 Repository-owned development memory for AI coding agents. Everything is stored
 in your own Git repository, on the Git host you configure (GitHub.com by
 default). Copilot in VS Code and Copilot CLI are the primary clients. Claude
 Code and Codex use the same records through thin instruction adapters.
+
+Built by David Monachino in deep collaboration with
+[Claude Code](https://claude.com/claude-code). See
+[Built with Claude Code](#built-with-claude-code).
 
 ## Start here
 
@@ -280,6 +285,38 @@ Reviewed November 4, 2026:
 - [Codex hooks](https://learn.chatgpt.com/docs/hooks)
 - [Entire CLI source](https://github.com/entireio/cli), MIT, design reference
   only; reviewed at commit `ea461e19e6914701c87ee80653eb96b142dd7f8d`
+
+## Built with Claude Code
+
+This project was built in deep collaboration with
+[Claude Code](https://claude.com/claude-code), Anthropic's agentic coding tool,
+and it says so on purpose. Claude Code wrote much of the code, tests, and
+documentation, ran the checks, and carried out independent security reviews.
+David Monachino set the direction, made the design decisions, and reviewed and
+approved every change. Commits carry a `Co-Authored-By: Claude` trailer, so the
+history shows the collaboration.
+
+That is the point of the project. It is a tool for working with coding agents,
+built the way it recommends working with them: the agent does real work, and
+a person owns the decisions and the result.
+
+How it was built matters less than whether it holds up, and you do not have to
+take anyone's word for that:
+
+- **Read it.** The helper is one dependency-free Python file using only the
+  standard library and Git: [`tools/memory/memory.py`](tools/memory/memory.py).
+- **Run the tests.** The suite uses disposable repositories and synthetic data,
+  and runs in CI on Linux and Windows with Python 3.10 and 3.14 on every pull
+  request.
+- **Check the guardrails.** CodeQL and OpenSSF Scorecard run continuously (see
+  the badges above), every Action is pinned to a commit SHA, and `main` accepts
+  only reviewed, squash-merged, signed commits that pass the required checks.
+- **Read the reasoning.** Design decisions and their trade-offs are recorded in
+  the [architecture decision records](docs/adr/).
+
+Found a bug or a weak spot? Open an issue, or report a security problem
+privately through [SECURITY.md](SECURITY.md). Specific, reproducible criticism
+of the code is welcome, whoever or whatever wrote it.
 
 ## Security and contributing
 
