@@ -31,6 +31,9 @@ client or deployment check; verification limits are listed explicitly.
   explains how to verify the work independently.
 - The session retention workflow now has read-only top-level permissions and
   grants `contents: write` to its one job only.
+- The `main` branch ruleset now requires one approving review from someone
+  other than the pull request's author and has no bypass, so no maintainer can
+  merge their own change unreviewed. `CONTRIBUTING.md` says so.
 - The README and getting-started guide warn that session refs in a public
   repository are readable by anyone, and say to turn capture and push off there.
 

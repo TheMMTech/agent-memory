@@ -62,11 +62,12 @@ RULESETS = [
         "target": "branch",
         "enforcement": "active",
         "conditions": {"ref_name": {"include": ["~DEFAULT_BRANCH"], "exclude": []}},
-        # Admins may merge a pull request past a rule (for example when CI is
-        # broken upstream) but cannot push to main directly.
-        "bypass_actors": [
-            {"actor_id": ADMIN_ROLE, "actor_type": "RepositoryRole", "bypass_mode": "pull_request"},
-        ],
+        # No bypass: every organization owner holds the repository admin role,
+        # so an admin bypass would let a pull request's author merge it without
+        # the required review. If CI is broken upstream, an owner changes this
+        # ruleset deliberately (recorded in the audit log) and runs --apply
+        # again afterwards to restore it.
+        "bypass_actors": [],
         "rules": [
             {"type": "deletion"},
             {"type": "non_fast_forward"},
@@ -75,7 +76,7 @@ RULESETS = [
             {
                 "type": "pull_request",
                 "parameters": {
-                    "required_approving_review_count": 0,
+                    "required_approving_review_count": 1,
                     "dismiss_stale_reviews_on_push": True,
                     "require_code_owner_review": False,
                     "require_last_push_approval": False,
