@@ -17,9 +17,15 @@ never in an issue or pull request. See the [roadmap](ROADMAP.md) for priorities 
   or agent instructions get extra scrutiny because they run on users' machines.
   The `main` ruleset requires one approving review from someone other than the
   pull request's author, and nobody can merge past it, maintainers included.
-- Pull requests are squash-merged, so `main` has one signed commit per pull
-  request. You do not need to sign your own commits; GitHub signs the squash
-  commit. Keep the pull request title in conventional-commit form
+- Sign every commit in your pull request. The `main` ruleset requires verified
+  signatures and has no bypass, so one unsigned commit blocks the merge. Use an
+  SSH or GPG key that you have added to your GitHub account as a signing key
+  (GitHub Docs, "Signing commits"); commits you make in GitHub's web editor are
+  signed for you. To fix an unsigned commit, re-sign it
+  (`git rebase --exec 'git commit --amend --no-edit -S' main`) and force-push
+  your branch.
+- Pull requests are squash-merged, so `main` has one commit per pull request,
+  signed by GitHub. Keep the pull request title in conventional-commit form
   (`fix: ...`, `feat: ...`, `docs: ...`), because it becomes the commit message.
 
 ## Before changing something

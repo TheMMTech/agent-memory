@@ -1,7 +1,7 @@
 # Current state
 
 This repository contains a repository-owned agent memory integration, helper
-version 0.2.0. It has two parts: curated checkpoints under `docs/memory/`, and
+version 0.3.0. It has two parts: curated checkpoints under `docs/memory/`, and
 agent session capture (ADR-0002) that stores redacted transcripts on
 `refs/agent-memory/sessions/<date>/<session-id>` in the same repository.
 Copilot in VS Code, Copilot CLI, Claude Code, and Codex are covered.
@@ -12,8 +12,8 @@ Copilot in VS Code, Copilot CLI, Claude Code, and Codex are covered.
   push URL must be on `allowed_git_host` (HTTPS, or SSH as `git_ssh_user`);
   `init` detects both from the target's origin or takes `--git-host`.
 - This kit's own configuration keeps `session_capture` and `session_push` off,
-  because this repository is public. A test pins this. New installations
-  default both to on.
+  because this repository is public. A test pins this. Since 0.3.0, new
+  installations default both to off; `init --sessions` turns them on.
 - Python 3.10+ standard library and Git are the only helper dependencies. No
   external service or binary, no model calls, no telemetry.
 - The helper never commits to a branch. Its only network use is Git push,

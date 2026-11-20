@@ -17,7 +17,7 @@ import tempfile
 import time
 import uuid
 
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 # A detached worker has no console; without this every Git child would open a
 # visible window on Windows (and could show an SSH prompt in it).
 NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0) if os.name == "nt" else 0

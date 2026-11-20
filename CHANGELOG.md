@@ -7,6 +7,24 @@ client or deployment check; verification limits are listed explicitly.
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-20
+
+Session capture becomes opt-in, and the public repository gets its governance,
+security scanning and review rules. Checkpoint `schema_version` stays 1, so
+existing checkpoints need no migration.
+
+### Upgrading from 0.2.0
+
+- Existing installations keep their configuration: `session_capture` and
+  `session_push` keep the values already written, and an older configuration
+  without these keys keeps the 0.2.0 runtime defaults. Nothing changes until
+  you edit the configuration or run `init` again.
+- New installations no longer capture sessions. Run `init --sessions`
+  instead of `init --hooks` to keep the 0.2.0 behavior, and only in a private
+  repository.
+- Roll back by reinstalling the helper and guides from tag `v0.2.0` through your
+  normal review; see the README's "Roll back" section.
+
 ### Added
 
 - Project governance for the public repository: `SECURITY.md` (private
@@ -34,8 +52,28 @@ client or deployment check; verification limits are listed explicitly.
 - The `main` branch ruleset now requires one approving review from someone
   other than the pull request's author and has no bypass, so no maintainer can
   merge their own change unreviewed. `CONTRIBUTING.md` says so.
+- **Contributors must sign their commits.** The `main` ruleset has always
+  required verified signatures, but the old admin bypass let maintainers merge
+  unsigned pull requests. Without it, every commit in a pull request must be
+  signed with a key registered on the author's GitHub account.
+  `CONTRIBUTING.md` explains how, and how to re-sign an unsigned commit.
 - The README and getting-started guide warn that session refs in a public
   repository are readable by anyone, and say to turn capture and push off there.
+
+### Known issues
+
+- Every 0.2.0 known issue below still applies. In particular, live hook
+  behavior in all four clients, VS Code's transcript location and macOS were
+  not validated for this release either.
+
+### Release record
+
+- Commit: the squash merge of the release pull request on `main`, prepared on
+  top of `6582e42`; the `v0.3.0` tag points at it.
+- Evidence: `python -m unittest discover -s tests -v`,
+  `python tools/memory/memory.py check --json` and `git diff --check` on
+  Ubuntu 24.04 with Python 3.12, plus the required CI checks on the release pull
+  request (test matrix on Ubuntu and Windows with Python 3.10 and 3.14, CodeQL).
 
 ## [0.2.0] - 2026-11-12
 
@@ -161,5 +199,6 @@ version and date, record the approved commit and test evidence, and leave a new
 Unreleased section. Do not invent release dates, tags, or successful tests. See
 [contribution guidance](CONTRIBUTING.md#release-checklist).
 
-[Unreleased]: https://github.com/TheMMTech/agent-memory/compare/main...HEAD
+[Unreleased]: https://github.com/TheMMTech/agent-memory/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/TheMMTech/agent-memory/releases/tag/v0.3.0
 [0.2.0]: https://github.com/TheMMTech/agent-memory/releases/tag/v0.2.0
