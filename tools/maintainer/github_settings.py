@@ -195,8 +195,15 @@ def team_section(r):
 
 def repo_section(r):
     repo = gh("GET", f"repos/{REPO}")
+    # GitHub validates the squash title and message as a pair, so send them together.
+    pair = ("squash_merge_commit_title", "squash_merge_commit_message")
     for key, want in REPO_FIELDS.items():
+        if key in pair:
+            continue
         r.item(key, repo.get(key), want, lambda key=key, want=want: gh("PATCH", f"repos/{REPO}", {key: want}))
+    want_pair = {k: REPO_FIELDS[k] for k in pair}
+    r.item("squash commit title and message", {k: repo.get(k) for k in pair}, want_pair,
+           lambda: gh("PATCH", f"repos/{REPO}", want_pair))
     topics = gh("GET", f"repos/{REPO}/topics")["names"]
     r.item("topics", sorted(topics), sorted(TOPICS), lambda: gh("PUT", f"repos/{REPO}/topics", {"names": TOPICS}))
 
