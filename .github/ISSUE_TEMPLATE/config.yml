@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/TheMMTech/agent-memory/security/advisories/new
+    about: Report privately. Never open a public issue for a security problem.
+  - name: Usage questions
+    url: https://github.com/TheMMTech/agent-memory/blob/main/SUPPORT.md
+    about: Where to look first, and how to ask.

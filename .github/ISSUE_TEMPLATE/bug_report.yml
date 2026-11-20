@@ -1,0 +1,63 @@
+name: Bug report
+description: Something in the helper, hooks, or documentation does not work as described.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use synthetic data only. Do not paste real transcripts, credentials, or
+        private project content. Security problems go to the private
+        vulnerability report instead (see SECURITY.md).
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      description: Output of `python tools/memory/memory.py --version`, or the commit you use.
+    validations:
+      required: true
+  - type: dropdown
+    id: client
+    attributes:
+      label: Agent client
+      options:
+        - Copilot in VS Code
+        - Copilot CLI
+        - Claude Code
+        - Codex
+        - None (helper only)
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Operating system and Python version
+      placeholder: Windows 11, Python 3.12
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Commands you ran and where (kit folder or target project).
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual result
+    validations:
+      required: true
+  - type: textarea
+    id: check
+    attributes:
+      label: Output of `python tools/memory/memory.py check --json`
+      description: Replace private host, repository, remote and branch names before pasting.
+      render: json
+  - type: checkboxes
+    id: hygiene
+    attributes:
+      label: Confirmation
+      options:
+        - label: This report contains no real secrets, transcripts, or private project data.
+          required: true

@@ -2,8 +2,23 @@
 
 Use a branch and a pull request for changes. Keep the scope small enough to
 review, explain the behavior that changes, and include the evidence needed to
-judge it. See the [roadmap](ROADMAP.md) for priorities and the
+judge it. Everyone taking part follows the [code of conduct](CODE_OF_CONDUCT.md).
+Report security problems privately as described in [SECURITY.md](SECURITY.md),
+never in an issue or pull request. See the [roadmap](ROADMAP.md) for priorities and the
 [documentation index](docs/memory/guides/README.md) for user-facing behavior.
+
+## How pull requests are merged
+
+- Fork the repository and open a pull request against `main`. Nobody pushes to
+  `main` directly; a branch ruleset enforces this.
+- Required checks must pass: the test matrix and CodeQL. Workflows from an
+  outside contributor's fork run only after a maintainer approves each run.
+- A maintainer reviews every change, and changes to hooks, `tools/`, workflows,
+  or agent instructions get extra scrutiny because they run on users' machines.
+- Pull requests are squash-merged, so `main` has one signed commit per pull
+  request. You do not need to sign your own commits; GitHub signs the squash
+  commit. Keep the pull request title in conventional-commit form
+  (`fix: ...`, `feat: ...`, `docs: ...`), because it becomes the commit message.
 
 ## Before changing something
 
