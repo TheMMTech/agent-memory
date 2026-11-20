@@ -1,12 +1,19 @@
-# Add your real maintainer team here before requiring code-owner review.
-# No organization/team name is assumed by this reusable kit.
+# Code owners for this kit's own repository.
+# The initializer never copies this file into other projects; write your own
+# with your real owners there.
+#
 # Hook files run repository code on every developer's machine: a change to any
-# of them, or to tools/memory/, is a code-execution change.
-# /tools/memory/ @YOUR-ORG/YOUR-TEAM
-# /docs/memory/ @YOUR-ORG/YOUR-TEAM
-# /.agents/skills/project-memory/ @YOUR-ORG/YOUR-TEAM
-# /.github/hooks/ @YOUR-ORG/YOUR-TEAM
-# /.claude/ @YOUR-ORG/YOUR-TEAM
-# /.codex/ @YOUR-ORG/YOUR-TEAM
-# /.github/workflows/agent-session-retention.yml @YOUR-ORG/YOUR-TEAM
-# /.github/copilot-instructions.md @YOUR-ORG/YOUR-TEAM
+# of them, to tools/, or to a workflow is a code-execution change and gets a
+# maintainer review before merge.
+
+*                                   @TheMMTech/maintainers
+
+/tools/                             @TheMMTech/maintainers
+/docs/memory/                       @TheMMTech/maintainers
+/.agents/skills/project-memory/     @TheMMTech/maintainers
+/.github/                           @TheMMTech/maintainers
+/.claude/                           @TheMMTech/maintainers
+/.codex/                            @TheMMTech/maintainers
+/AGENTS.md                          @TheMMTech/maintainers
+/CLAUDE.md                          @TheMMTech/maintainers
+/SECURITY.md                        @TheMMTech/maintainers

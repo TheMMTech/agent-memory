@@ -1,5 +1,10 @@
 # Agent memory
 
+[![Project memory checks](https://github.com/TheMMTech/agent-memory/actions/workflows/memory-check.yml/badge.svg)](https://github.com/TheMMTech/agent-memory/actions/workflows/memory-check.yml)
+[![CodeQL](https://github.com/TheMMTech/agent-memory/actions/workflows/codeql.yml/badge.svg)](https://github.com/TheMMTech/agent-memory/actions/workflows/codeql.yml)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/TheMMTech/agent-memory/badge)](https://scorecard.dev/viewer/?uri=github.com/TheMMTech/agent-memory)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 Repository-owned development memory for AI coding agents. Everything is stored
 in your own Git repository, on the Git host you configure (GitHub.com by
 default). Copilot in VS Code and Copilot CLI are the primary clients. Claude
@@ -207,12 +212,12 @@ not echo finding values. Referenced Git objects are checked when creating a
 checkpoint; old references after rebase/squash may need maintainer review.
 
 Protect executable files, instructions, and memory policies using your
-repository's actual owners and required-review settings. `.github/CODEOWNERS`
-contains commented examples only because the real team is unknown. The kit's
-own CI is one GitHub.com job that runs the tests on Linux and Windows with
-Python 3.10 and 3.14, using immutable pins for the official checkout and
-setup-python Actions. Application initialization does not copy that check
-workflow; `init --hooks` copies only the retention workflow. It uses an
+repository's actual owners and required-review settings. This kit's own
+`.github/CODEOWNERS` names its maintainers and shows which paths deserve that
+protection; the initializer does not copy it, so write your own. The kit's
+own CI runs the tests on Linux and Windows with Python 3.10 and 3.14, plus
+CodeQL and OpenSSF Scorecard, with every Action pinned to a commit SHA.
+Application initialization does not copy those workflows; `init --hooks` copies only the retention workflow. It uses an
 ephemeral token that is not persisted, with `contents: write` only so it can
 delete expired session refs. Keep a normal approval gate for untrusted PR
 workflows.
@@ -223,7 +228,9 @@ Redaction is a safety net, not a guarantee; keep your host's secret scanning and
 protection on. Transcripts are stored uncompressed so those scanners can read
 them. Pushes go only to the repository recorded as `session_repository` at
 installation, never to a fork. Anyone with read access to the repository can fetch session refs,
-although they do not appear in the GitHub web interface. Whether pushes to
+although they do not appear in the GitHub web interface. **In a public
+repository that means anyone on the internet**: set `session_capture` and
+`session_push` to `false` there, as this kit does for itself. Whether pushes to
 `refs/agent-memory/*` pass your rulesets is not verified for every host; the
 first push in a repository is the test.
 
@@ -263,6 +270,13 @@ Reviewed November 4, 2026:
 - [Codex hooks](https://learn.chatgpt.com/docs/hooks)
 - [Entire CLI source](https://github.com/entireio/cli), MIT, design reference
   only; reviewed at commit `ea461e19e6914701c87ee80653eb96b142dd7f8d`
+
+## Security and contributing
+
+Report vulnerabilities privately as described in [SECURITY.md](SECURITY.md),
+never in a public issue. Contributions are welcome through pull requests: see
+[CONTRIBUTING.md](CONTRIBUTING.md), [SUPPORT.md](SUPPORT.md), and the
+[code of conduct](CODE_OF_CONDUCT.md).
 
 ## License
 

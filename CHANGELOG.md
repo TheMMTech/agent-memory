@@ -7,7 +7,24 @@ client or deployment check; verification limits are listed explicitly.
 
 ## [Unreleased]
 
-Nothing yet.
+### Added
+
+- Project governance for the public repository: `SECURITY.md` (private
+  vulnerability reporting and security@monachino.tech), a code of conduct
+  (Contributor Covenant 2.1), `SUPPORT.md`, issue forms, a pull request
+  template, and a real `.github/CODEOWNERS` for the maintainers team.
+- CodeQL (Python and workflows) and OpenSSF Scorecard workflows, and Dependabot
+  version updates for the SHA-pinned GitHub Actions.
+- `tools/maintainer/github_settings.py`, which checks or applies this
+  repository's GitHub settings (rulesets, secret scanning, Actions policy).
+  The initializer does not copy it.
+
+### Changed
+
+- The session retention workflow now has read-only top-level permissions and
+  grants `contents: write` to its one job only.
+- The README and getting-started guide warn that session refs in a public
+  repository are readable by anyone, and say to turn capture and push off there.
 
 ## [0.2.0] - 2026-11-12
 

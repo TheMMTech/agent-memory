@@ -1,0 +1,29 @@
+name: Feature request
+description: Suggest a change or a new capability.
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Check the [roadmap](https://github.com/TheMMTech/agent-memory/blob/main/ROADMAP.md)
+        first, including "Not part of the approved design".
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What are you trying to do, and what gets in the way?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+    validations:
+      required: true
+  - type: textarea
+    id: boundaries
+    attributes:
+      label: Effect on the project boundaries
+      description: >-
+        Would this add a dependency, a network call, a model call, or a new
+        storage location, or change the destination rule or redaction? Say so.
