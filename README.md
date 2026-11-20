@@ -124,10 +124,20 @@ guides are preserved during initialization; an upgrade needs explicit review.
 ## Enable session capture and startup context
 
 ```powershell
+# Startup brief only; session capture and push stay off (safe for public repositories)
 python E:/Projects/agent-memory/tools/memory/memory.py --repo C:/work/existing-repo init --hooks --apply
+# Private repository: also turn on session capture and push
+python E:/Projects/agent-memory/tools/memory/memory.py --repo C:/work/existing-repo init --sessions --apply
 ```
 
-This adds, or merges into existing files without removing anything:
+Session capture is opt-in. `--hooks` writes a new configuration with
+`session_capture` and `session_push` set to `false`, so the hooks only add the
+startup brief. `--sessions` installs the same hooks and turns both on. Use it
+only in a private repository: anyone who can read the repository can fetch
+session refs. An existing `docs/memory/config.json` is never changed by `init`;
+edit those two settings yourself.
+
+Either form adds, or merges into existing files without removing anything:
 
 | File | Client | Events |
 | --- | --- | --- |
@@ -136,8 +146,8 @@ This adds, or merges into existing files without removing anything:
 | `.codex/hooks.json` | Codex | `SessionStart`, `Stop`, `SessionEnd` |
 | `.github/workflows/agent-session-retention.yml` | Git host CI | Daily retention |
 
-The start hook adds the current-state brief to the agent's context. Turn-end and
-session-end hooks queue a capture and return in well under a second. A detached
+The start hook adds the current-state brief to the agent's context. With capture
+on, turn-end and session-end hooks queue a capture and return in well under a second. A detached
 background worker then redacts the transcript, stores it on
 `refs/agent-memory/sessions/<YYYY-MM-DD>/<session-id>`, and pushes it to the
 configured remote. Branches, the index, and pull requests are not touched. Hooks

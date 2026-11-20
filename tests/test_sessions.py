@@ -50,7 +50,7 @@ class SessionTests(unittest.TestCase):
         run_git(self.root, "config", "user.name", "Memory Test")
         run_git(self.root, "config", "user.email", "memory-test@example.invalid")
         commit(self.root, "Initial code state")
-        memory.initialize(self.root, KIT, True, False)
+        memory.initialize(self.root, KIT, True, False, sessions=True)
         self.cfg = memory.config(self.root)
         self.homes = {name: self.base / name for name in ("claude", "codex", "copilot", "appdata")}
         environment = {"CLAUDE_CONFIG_DIR": str(self.homes["claude"]), "CODEX_HOME": str(self.homes["codex"]),
@@ -221,7 +221,7 @@ class SessionTests(unittest.TestCase):
             self.assertIn("refs/agent-memory/sessions/2020-01-01/old-1", run_git(remote, "for-each-ref"))
             clone = self.base / "clone"
             run_git(self.base, "clone", "--quiet", str(remote), str(clone))
-            memory.initialize(clone, KIT, True, False)
+            memory.initialize(clone, KIT, True, False, sessions=True)
             self.assertEqual(2, memory.fetch_sessions(clone, memory.config(clone))["fetched_sessions"])
             listed = memory.list_sessions(clone, commit=made)
             self.assertEqual("push-1", listed[0]["session_id"])  # Newest first.
@@ -319,7 +319,7 @@ class SessionTests(unittest.TestCase):
         original = {"permissions": {"allow": ["Bash(ls)"]},
                     "hooks": {"Stop": [{"hooks": [{"type": "command", "command": "echo team"}]}]}}
         settings.write_text(json.dumps(original), encoding="utf-8")
-        memory.initialize(target, KIT, True, True)
+        memory.initialize(target, KIT, True, True, sessions=True)
         merged = json.loads(settings.read_text(encoding="utf-8"))
         self.assertEqual(["Bash(ls)"], merged["permissions"]["allow"])
         self.assertEqual("echo team", merged["hooks"]["Stop"][0]["hooks"][0]["command"])
@@ -327,7 +327,27 @@ class SessionTests(unittest.TestCase):
         self.assertTrue((target / ".codex/hooks.json").is_file())
         self.assertTrue((target / ".github/workflows/agent-session-retention.yml").is_file())
         self.assertTrue(json.loads((target / "docs/memory/config.json").read_text())["session_push"])
-        self.assertEqual([], memory.initialize(target, KIT, True, True))
+        self.assertEqual([], memory.initialize(target, KIT, True, True, sessions=True))
+
+    def test_init_leaves_session_capture_and_push_off_unless_asked(self):
+        target = self.base / "public app"
+        target.mkdir()
+        run_git(target, "init")
+        memory.initialize(target, KIT, True, True)
+        value = memory.config(target)
+        self.assertFalse(value["session_capture"])
+        self.assertFalse(value["session_push"])
+        self.assertFalse(memory.capture_enabled(value))
+        self.assertFalse(memory.push_enabled(value))
+        opted = self.base / "private app"
+        opted.mkdir()
+        run_git(opted, "init")
+        result = subprocess.run([sys.executable, str(KIT / "tools/memory/memory.py"), "--repo", str(opted),
+                                 "init", "--sessions", "--apply"], capture_output=True, text=True)
+        self.assertEqual(0, result.returncode, result.stderr)
+        value = memory.config(opted)
+        self.assertTrue(value["session_capture"] and value["session_push"])
+        self.assertTrue((opted / ".github/hooks/project-memory.json").is_file())  # --sessions implies --hooks
 
     def test_init_refuses_a_changed_project_memory_hook(self):
         target = self.base / "app2"
