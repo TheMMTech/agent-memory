@@ -1586,7 +1586,8 @@ def managed_block(original: str, content: str) -> str:
 
 
 def initialize(target: Path, source: Path, apply: bool, hooks: bool,
-               git_host: str | None = None, ssh_user: str | None = None) -> list[dict]:
+               git_host: str | None = None, ssh_user: str | None = None,
+               sessions: bool = False) -> list[dict]:
     existing_config = safe_path(target, f"{MEMORY}/config.json")
     if existing_config.is_file():
         policy = config(target)
@@ -1611,8 +1612,11 @@ def initialize(target: Path, source: Path, apply: bool, hooks: bool,
         owned += [".github/hooks/project-memory.json", ".github/workflows/agent-session-retention.yml"]
     # Never export this kit's own settings, such as its disabled capture, into
     # another project. New installations start from the defaults and their host.
+    # Session capture and push are opt-in (--sessions): anyone who can read the
+    # repository can fetch session refs, which in a public one is everybody.
     installed = {**DEFAULTS, "allowed_git_host": policy["allowed_git_host"],
-                 "git_ssh_user": policy["git_ssh_user"]}
+                 "git_ssh_user": policy["git_ssh_user"],
+                 "session_capture": sessions, "session_push": sessions}
     repository = detect_repository(target, policy)
     if repository:
         # Pin session pushes to this repository, never a fork or upstream remote.
@@ -1747,6 +1751,9 @@ def main(argv=None) -> int:
     child = sub.add_parser("init", help="Preview additive setup in an existing Git repository.")
     child.add_argument("--apply", action="store_true", help="Apply the displayed additive integration.")
     child.add_argument("--hooks", action="store_true", help="Include optional Copilot hooks.")
+    child.add_argument("--sessions", action="store_true",
+                       help="Also turn on session capture and push in a new config (implies --hooks). "
+                            "Do not use in a public repository.")
     child.add_argument("--git-host", help="Approved Git host (default: origin's host, else github.com).")
     child.add_argument("--ssh-user", help="SSH user on that host (default: origin's, else git).")
     child.add_argument("--json", action="store_true")
@@ -1795,8 +1802,8 @@ def main(argv=None) -> int:
             run_worker(root)  # Detached; its summary goes to the state directory.
             return 0
         if args.command == "init":
-            result = initialize(root, Path(__file__).resolve().parents[2], args.apply, args.hooks,
-                                args.git_host, args.ssh_user)
+            result = initialize(root, Path(__file__).resolve().parents[2], args.apply,
+                                args.hooks or args.sessions, args.git_host, args.ssh_user, args.sessions)
             emit({"applied": args.apply, "changes": result}, True)
             return 0
         cfg = config(root)

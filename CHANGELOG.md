@@ -21,6 +21,12 @@ client or deployment check; verification limits are listed explicitly.
 
 ### Changed
 
+- **Session capture is now opt-in.** `init --hooks` writes a new configuration
+  with `session_capture` and `session_push` set to `false`, so the hooks only
+  add the startup brief. The new `init --sessions` flag installs the hooks with
+  both on; use it only in private repositories, because anyone who can read a
+  repository can fetch its session refs. Existing configurations, and the
+  runtime defaults for older configurations without these keys, are unchanged.
 - The README credits the project's deep collaboration with Claude Code and
   explains how to verify the work independently.
 - The session retention workflow now has read-only top-level permissions and

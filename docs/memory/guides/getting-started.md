@@ -134,10 +134,10 @@ The instructions and skill work without hooks. The hooks add two things: a
 short brief at the start of every agent session, and capture of each session's
 redacted transcript onto hidden refs in the project.
 
-> **Public project?** Anyone who can read the repository can fetch those refs,
-> so in a public repository that is anyone on the internet. Before you apply,
-> set `session_capture` and `session_push` to `false` in
-> `docs/memory/config.json` if the project is public, and keep only the startup brief.
+Capture is opt-in. Anyone who can read the repository can fetch those refs, so
+in a public repository that is anyone on the internet. `--hooks` installs the
+hooks with capture and push off (startup brief only); `--sessions` installs the
+same hooks with capture and push on, for private repositories.
 
 Preview and apply from the kit folder:
 
@@ -145,6 +145,10 @@ Preview and apply from the kit folder:
 python tools/memory/memory.py --repo "C:/Work/my-project" init --hooks
 python tools/memory/memory.py --repo "C:/Work/my-project" init --hooks --apply
 ```
+
+For a private project where you want transcripts captured, use `--sessions`
+instead of `--hooks` in both commands. If `docs/memory/config.json` already
+exists, `init` keeps it; set `session_capture` and `session_push` there yourself.
 
 **Expected result:** the preview lists `.github/hooks/project-memory.json`
 (Copilot CLI and VS Code), `.claude/settings.json` (Claude Code),

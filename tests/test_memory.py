@@ -318,7 +318,8 @@ class MemoryTests(unittest.TestCase):
         value = memory.config(target)
         self.assertEqual("github.com", value["allowed_git_host"])
         self.assertNotIn("session_repository", value)
-        self.assertTrue(value["session_capture"])
+        self.assertFalse(value["session_capture"])
+        self.assertFalse(value["session_push"])
 
     def test_invalid_host_settings_and_unknown_fields_are_rejected(self):
         location = self.root / "docs/memory/config.json"

@@ -25,8 +25,8 @@ network, and only for `refs/agent-memory/*` on the approved remote.
 | `show ID [--json]` | Read one checkpoint using its full ID. | No. |
 | `checkpoint --input FILE` or `checkpoint --stdin` | Create a new draft after validation. | Creates one unstaged checkpoint. |
 | `render ID [--json]` | Regenerate a reviewed checkpoint's body from its metadata. | Replaces that checkpoint's displayed body. |
-| `init [--hooks] [--git-host HOST] [--ssh-user USER] [--json]` | Preview adding the integration to the target. | No. |
-| `init --apply [--hooks] [--git-host HOST] [--ssh-user USER] [--json]` | Apply the additive integration. `--git-host` and `--ssh-user` set the approved host and SSH user; without them `init` detects both from the target's `origin` (or only remote), else uses `github.com` and `git`. `--hooks` adds or merges the three agent hook files and the retention workflow. | Creates files, appends instruction blocks, and merges hook entries. |
+| `init [--hooks \| --sessions] [--git-host HOST] [--ssh-user USER] [--json]` | Preview adding the integration to the target. | No. |
+| `init --apply [--hooks \| --sessions] [--git-host HOST] [--ssh-user USER] [--json]` | Apply the additive integration. `--git-host` and `--ssh-user` set the approved host and SSH user; without them `init` detects both from the target's `origin` (or only remote), else uses `github.com` and `git`. `--hooks` adds or merges the three agent hook files and the retention workflow, and writes a new configuration with session capture and push off (startup brief only). `--sessions` does the same with capture and push on; use it only in a private repository. An existing configuration is never changed. | Creates files, appends instruction blocks, and merges hook entries. |
 | `hook [--agent AGENT] EVENT` | Entry point for agent hook files. `AGENT` is `copilot` (default), `claude-code`, or `codex`. | Writes small state files under `.git/agent-memory/` and starts the background worker. |
 | `sessions status` | Show capture and push settings, local and fetched session counts, unpushed sessions, and the last worker result. | No. |
 | `sessions list [--commit SHA] [--limit N]` | List sessions, newest first. `--commit` keeps sessions that made or ended at that commit. | No. |
@@ -114,8 +114,8 @@ is no personal override file or setting to disable secret checks.
 | `max_start_chars` | `6000` | 256–16,000 characters for the injected context text. |
 | `max_results` | `5` | 1–20 search results. |
 | `stale_after_days` | `90` | 1–3,650 days before a checkpoint is labeled stale. No deletion occurs. |
-| `session_capture` | `true` (`false` in this kit) | Capture agent sessions from the hooks. |
-| `session_push` | `true` (`false` in this kit) | Push session refs to the configured remote. |
+| `session_capture` | `false` from `init`, `true` from `init --sessions` | Capture agent sessions from the hooks. Never turn on in a public repository. |
+| `session_push` | `false` from `init`, `true` from `init --sessions` | Push session refs to the configured remote. Never turn on in a public repository. |
 | `session_retention_days` | `30` | 1–3,650 days, counted from each session's start date. |
 | `session_max_transcript_bytes` | `50331648` (48 MiB) | 1–95 MiB. Larger transcripts keep their newest whole lines and are marked truncated. |
 | `session_redact_emails` | `true` | Replace email addresses in transcripts. |
