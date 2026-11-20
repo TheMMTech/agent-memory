@@ -52,6 +52,11 @@ existing checkpoints need no migration.
 - The `main` branch ruleset now requires one approving review from someone
   other than the pull request's author and has no bypass, so no maintainer can
   merge their own change unreviewed. `CONTRIBUTING.md` says so.
+- **Contributors must sign their commits.** The `main` ruleset has always
+  required verified signatures, but the old admin bypass let maintainers merge
+  unsigned pull requests. Without it, every commit in a pull request must be
+  signed with a key registered on the author's GitHub account.
+  `CONTRIBUTING.md` explains how, and how to re-sign an unsigned commit.
 - The README and getting-started guide warn that session refs in a public
   repository are readable by anyone, and say to turn capture and push off there.
 
