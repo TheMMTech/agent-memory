@@ -132,8 +132,14 @@ just because a file exists; verify it in your actual client.
 
 The instructions and skill work without hooks. The hooks add two things: a
 short brief at the start of every agent session, and capture of each session's
-redacted transcript onto hidden refs in the project. Preview and apply from the
-kit folder:
+redacted transcript onto hidden refs in the project.
+
+> **Public project?** Anyone who can read the repository can fetch those refs,
+> so in a public repository that is anyone on the internet. Before you apply,
+> set `session_capture` and `session_push` to `false` in
+> `docs/memory/config.json` if the project is public, and keep only the startup brief.
+
+Preview and apply from the kit folder:
 
 ```powershell
 python tools/memory/memory.py --repo "C:/Work/my-project" init --hooks
