@@ -97,8 +97,8 @@ Run the kit's script with `--repo` pointing at the target Git checkout. Preview
 is the default; `--apply` performs the requested additive integration:
 
 ```powershell
-python E:/Projects/agent-memory/tools/memory/memory.py --repo C:/work/existing-repo init
-python E:/Projects/agent-memory/tools/memory/memory.py --repo C:/work/existing-repo init --apply
+python C:/Work/agent-memory/tools/memory/memory.py --repo C:/work/existing-repo init
+python C:/Work/agent-memory/tools/memory/memory.py --repo C:/work/existing-repo init --apply
 ```
 
 Initialization writes the detected host, SSH user and `session_repository` (the
@@ -130,9 +130,9 @@ guides are preserved during initialization; an upgrade needs explicit review.
 
 ```powershell
 # Startup brief only; session capture and push stay off (safe for public repositories)
-python E:/Projects/agent-memory/tools/memory/memory.py --repo C:/work/existing-repo init --hooks --apply
+python C:/Work/agent-memory/tools/memory/memory.py --repo C:/work/existing-repo init --hooks --apply
 # Private repository: also turn on session capture and push
-python E:/Projects/agent-memory/tools/memory/memory.py --repo C:/work/existing-repo init --sessions --apply
+python C:/Work/agent-memory/tools/memory/memory.py --repo C:/work/existing-repo init --sessions --apply
 ```
 
 Session capture is opt-in. `--hooks` writes a new configuration with

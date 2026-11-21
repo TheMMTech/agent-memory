@@ -8,6 +8,9 @@ repository admin who can also manage the organization's teams.
     python tools/maintainer/github_settings.py            # report drift, change nothing
     python tools/maintainer/github_settings.py --apply    # make GitHub match
 
+The maintainers team is checked for the account `gh` is logged in as. Pass
+`--member LOGIN` (repeatable) to check other or additional logins instead.
+
 Rulesets, branch protection and push protection need a public repository on
 GitHub Free. While the repository is private those items are reported as
 "needs public" and skipped; run again with --apply right after the switch.
@@ -22,7 +25,6 @@ import sys
 REPO = "TheMMTech/agent-memory"
 ORG = "TheMMTech"
 TEAM = "maintainers"
-TEAM_MEMBERS = ["pozzuoli"]
 TEAM_PERMISSION = "maintain"
 TOPICS = [
     "agent-memory", "ai-agents", "claude-code", "codex", "github-copilot",
@@ -174,12 +176,12 @@ class Runner:
             print(f"  ERROR      {exc}")
 
 
-def team_section(r):
+def team_section(r, members):
     team = gh("GET", f"orgs/{ORG}/teams/{TEAM}", ok_missing=True)
     r.item("team exists", team is not None, True, lambda: gh("POST", f"orgs/{ORG}/teams", {
         "name": TEAM, "privacy": "closed",
         "description": "Maintainers of agent-memory (CODEOWNERS)"}))
-    for login in TEAM_MEMBERS:
+    for login in members or [gh("GET", "user")["login"]]:
         m = gh("GET", f"orgs/{ORG}/teams/{TEAM}/memberships/{login}", ok_missing=True) if team or r.apply else None
         state = m.get("state") if isinstance(m, dict) else None
         r.item(f"team member {login}", state, "active", lambda login=login: gh(
@@ -294,10 +296,12 @@ def main():
     parser.add_argument("--apply", action="store_true", help="change GitHub to match (default: report only)")
     parser.add_argument("--without-rulesets", action="store_true",
                         help="skip rulesets (first run after going public, before CodeQL has a green run on main)")
+    parser.add_argument("--member", action="append", metavar="LOGIN",
+                        help="maintainers team member to check (repeatable; default: the gh login)")
     args = parser.parse_args()
     r = Runner(args.apply)
     print(f"{REPO}: {'applying' if args.apply else 'checking (read-only)'}")
-    r.section("Team and CODEOWNERS", lambda: team_section(r))
+    r.section("Team and CODEOWNERS", lambda: team_section(r, args.member))
     r.section("Repository", lambda: repo_section(r))
     r.section("Actions", lambda: actions_section(r))
     r.section("Security features", lambda: security_section(r))
