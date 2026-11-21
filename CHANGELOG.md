@@ -7,6 +7,20 @@ client or deployment check; verification limits are listed explicitly.
 
 ## [Unreleased]
 
+### Changed
+
+- `tools/maintainer/github_settings.py` checks the maintainers team for the
+  account `gh` is logged in as, or for each `--member LOGIN` given, instead of a
+  login written into the script.
+
+### Fixed
+
+- The README's `init` examples use the placeholder kit path
+  `C:/Work/agent-memory`, matching the getting-started guide, instead of a
+  maintainer's local checkout path.
+- A redaction test no longer contains a real local user path; it uses a
+  placeholder with the same shape.
+
 ## [0.3.0] - 2026-11-20
 
 Session capture becomes opt-in, and the public repository gets its governance,
