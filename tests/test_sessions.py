@@ -436,7 +436,7 @@ class SessionTests(unittest.TestCase):
             self.assertNotIn(secret, memory.redact_text(text, {}, True), text[:30])
         stored = memory.redact_value({"env": {"AWS_SECRET_ACCESS_KEY": aws_secret}}, {}, True)
         self.assertNotIn(aws_secret, json.dumps(stored))
-        for path in ("/Users/shepard/AppData/Local/Temp/claude/af8e6e1950eec632/file.txt",
+        for path in ("/Users/example/AppData/Local/Temp/claude/0123456789abcdef/file.txt",
                      "src/memory/test_sessions_capture_2024.py", "tenant@tenant.ghe.com:org/repo"):
             self.assertIn(path, memory.redact_text(path, {}, True))
 
